@@ -1,10 +1,10 @@
 
 var numberOfDrumButtons = document.querySelectorAll(".drum").length;
 var allDrum = ["w", "a", "s", "d", "j", "k" ,"l"];
-var intervalPatter = [10, 20, 30, 40, 50, 100, 150, 200, 250, 300];
-var userSoundMix = [];
 
 var isAutoplayOn = false;
+
+var intervalId;
 
 for (var i = 0; i < numberOfDrumButtons; i ++) {
 
@@ -27,13 +27,7 @@ document.addEventListener("keydown", function (event) {
     
 })
 
-document.querySelector(".autoplay").addEventListener("click", startAutoplay);
-
-document.querySelector(".stop-autoplay").addEventListener("click", stopAutoplay)
-
-document.querySelector(".mix-sound").addEventListener("click", mixSound);
-
-document.querySelector(".play-sound-mix").addEventListener("click", playSoundMix);
+document.querySelector(".autoplay").addEventListener("click", autoplay);
 
 function makeSound(key) {
 
@@ -96,33 +90,15 @@ function generateRandomNumberBetweenOneAnd(number) {
 }
 
 function autoplay() {
-    var randomIndex = generateRandomNumberBetweenOneAnd(7);
-    var randomDrum = allDrum[randomIndex];
-    makeSound(randomDrum);
-    startAutoplay();
-}
-
-function startAutoplay() {
-    var randomIndexForTimer = generateRandomNumberBetweenOneAnd(10);
-    var timer = intervalPatter[randomIndexForTimer];
-    updateTimer(timer);
-    
-}
-
-function stopAutoplay() {
-    clearTimeout(timeoutId)
-    isAutoplayOn = false;
-}
-
-function updateTimer(millisecond) {
-    timeoutId = setTimeout(autoplay, millisecond);
-}
-
-function mixSound() {
-    userSoundMix.push(buttonInnerHTML);
-    console.log(userSoundMix);
-}
-
-function playSoundMix() {
-
+    if (!isAutoplayOn) {
+        intervalId = setInterval(function(){
+            var randomIndex = generateRandomNumberBetweenOneAnd(7);
+            var randomDrum = allDrum[randomIndex];
+            makeSound(randomDrum);
+        }, 200);
+        isAutoplayOn = true;
+    }else {
+        clearInterval(intervalId);
+        isAutoplayOn = false;
+    }
 }
