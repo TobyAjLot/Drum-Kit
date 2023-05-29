@@ -1,3 +1,3 @@
 # Drum-Kit
 
-A fun Javascript frontend app
+This project is based on The Web Development Bootcamp by Angela Yu, with an added functionality.
