@@ -1,0 +1,128 @@
+
+var numberOfDrumButtons = document.querySelectorAll(".drum").length;
+var allDrum = ["w", "a", "s", "d", "j", "k" ,"l"];
+var intervalPatter = [10, 20, 30, 40, 50, 100, 150, 200, 250, 300];
+var userSoundMix = [];
+
+var isAutoplayOn = false;
+
+for (var i = 0; i < numberOfDrumButtons; i ++) {
+
+    document.querySelectorAll(".drum")[i].addEventListener("click", function () {
+
+        var buttonInnerHTML = this.innerHTML;
+
+        makeSound(buttonInnerHTML);
+
+        buttonAnimation(buttonInnerHTML);
+
+    });
+   
+}
+
+document.addEventListener("keydown", function (event) {
+    makeSound(event.key);
+
+    buttonAnimation(event.key);
+    
+})
+
+document.querySelector(".autoplay").addEventListener("click", startAutoplay);
+
+document.querySelector(".stop-autoplay").addEventListener("click", stopAutoplay)
+
+document.querySelector(".mix-sound").addEventListener("click", mixSound);
+
+document.querySelector(".play-sound-mix").addEventListener("click", playSoundMix);
+
+function makeSound(key) {
+
+    switch(key) {
+        case "w":
+            var snare = new Audio("./sounds/snare.mp3");
+            snare.play();
+            break;
+
+        case "a":
+            var tom1 = new Audio("./sounds/tom-1.mp3");
+            tom1.play();
+            break;
+
+        case "s":
+            var tom2 = new Audio("./sounds/tom-2.mp3");
+            tom2.play();
+            break;
+
+        case "d":
+            var tom3 = new Audio("./sounds/tom-3.mp3");
+            tom3.play();
+            break;
+
+        case "j":
+            var tom4 = new Audio("./sounds/tom-4.mp3");
+            tom4.play();
+            break;
+
+        case "k":
+            var kick = new Audio("./sounds/kick-bass.mp3");
+            kick.play();
+            break;
+
+        case "l":
+            var crash = new Audio("./sounds/crash.mp3");
+            crash.play();
+            break;
+
+        default:
+            console.log(buttonInnerHTML);
+    }
+}
+
+function buttonAnimation(currentKey) {
+
+  var activeButton = document.querySelector("." + currentKey);
+
+  activeButton.classList.add("pressed");
+
+  setTimeout(function() {
+    activeButton.classList.remove("pressed");
+  }, 100);
+
+}
+
+function generateRandomNumberBetweenOneAnd(number) {
+    var randomNumber = Math.floor(Math.random() * number);
+    return randomNumber;
+}
+
+function autoplay() {
+    var randomIndex = generateRandomNumberBetweenOneAnd(7);
+    var randomDrum = allDrum[randomIndex];
+    makeSound(randomDrum);
+    startAutoplay();
+}
+
+function startAutoplay() {
+    var randomIndexForTimer = generateRandomNumberBetweenOneAnd(10);
+    var timer = intervalPatter[randomIndexForTimer];
+    updateTimer(timer);
+    
+}
+
+function stopAutoplay() {
+    clearTimeout(timeoutId)
+    isAutoplayOn = false;
+}
+
+function updateTimer(millisecond) {
+    timeoutId = setTimeout(autoplay, millisecond);
+}
+
+function mixSound() {
+    userSoundMix.push(buttonInnerHTML);
+    console.log(userSoundMix);
+}
+
+function playSoundMix() {
+
+}
